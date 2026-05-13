@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\omera\\Desktop\\MiniOyunMotorum\\OyunMotorum\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DE33A2DC-6BAD-4E02-894B-77698CAA5B94}|OyunMotorum.vcxproj|C:\\Users\\omera\\Desktop\\MiniOyunMotorum\\OyunMotorum\\OyunMotoruKod1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{DE33A2DC-6BAD-4E02-894B-77698CAA5B94}|OyunMotorum.vcxproj|solutionrelative:OyunMotoruKod1.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "OyunMotoruKod1.cpp",
+              "DocumentMoniker": "C:\\Users\\omera\\Desktop\\MiniOyunMotorum\\OyunMotorum\\OyunMotoruKod1.cpp",
+              "RelativeDocumentMoniker": "OyunMotoruKod1.cpp",
+              "ToolTip": "C:\\Users\\omera\\Desktop\\MiniOyunMotorum\\OyunMotorum\\OyunMotoruKod1.cpp",
+              "RelativeToolTip": "OyunMotoruKod1.cpp",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAAC4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-05-10T15:47:05.775Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

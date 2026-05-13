@@ -1,2 +1,3 @@
 # MiniOyunMotorum
 Yazılım Tasarım Örüntüleri Ödevim içindir. 
+Selaam ben Ömeralp . Yazılım Tasarım Örüntüleri ödevim için C şıkkı = Mini Oyun Motorunu seçtim. Zaten İlk günden beri video oyunları yapmak ve Ülkemizi oyun sektörü namına daha iyi bir noktaya taşımak istediğimi; karakter tasarlama, sinematik, müzik, senaryo - hikaye terimlerini yazılımla birleştirerek cok daha başarılı ürünler ortaya koyabileceğimi söylüyordum. Sanata olan tutkumu yazılıma yansıtarak elimden gelen en iyi çalışmayı ortaya koymaya çalışacağım. Bu ödevin beni olumlu etkileyeceğini düşünüyorum ve umarım öyle de olur.
