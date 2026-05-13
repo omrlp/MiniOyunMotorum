@@ -73,6 +73,10 @@ class CharacterFactory:
     def create_character(character, zırh, hasar, can):
         return characters(character, zırh, hasar, can)
      
+class EsyaFactory:
+    @staticmethod
+    def create_esya(esya):
+        return Esyalar(esya)  
 
 karakterler.append(CharacterFactory.create_character("Sovalye", 3, 4, 30))
 karakterler.append(CharacterFactory.create_character("Iblis", 1, 2, 45))
