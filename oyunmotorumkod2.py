@@ -1,7 +1,9 @@
 
 import string
+from unicodedata import name
 
 class game:
+    
     def __init__(self):
         self.karakterler = []
         self.esyalar = []
@@ -39,34 +41,19 @@ class gamemodePVP:
         pass
     
 class gameobjects:
-    def update(self):
-        pass
+    def __init__(self, name):
+        self.name = name
 
 class characters(gameobjects):
-    def __init__(self, character, zırh, hasar, can):
-        self.character = character
+    def __init__(self, zırh, hasar, can):
+        super().__init__(name)
         self.zırh = zırh
         self.hasar = hasar
-        self.can = can
-        def character_zırh(self):
-            pass
-        def character_hasar(self):
-            pass
-        def character_can(self):
-            pass
         
-class Esyalar(gameObjects):
-    def __init__(self, esya):
-        self.esya = esya
-
-    def ozellikler(self):
-        pass
-    def etkihasar(self):
-        pass
-    def etkican(self):
-        pass
-    def etkizırh(self):
-        pass
+        
+class Esyalar(gameobjects):
+    def __init__(self, name):
+        super().__init__(name)
      
 class CharacterFactory:
     @staticmethod
@@ -77,16 +64,18 @@ class EsyaFactory:
     @staticmethod
     def create_esya(esya):
         return Esyalar(esya)  
-
-karakterler.append(CharacterFactory.create_character("Sovalye", 3, 4, 30))
-karakterler.append(CharacterFactory.create_character("Iblis", 1, 2, 45))
-karakterler.append(CharacterFactory.create_character("Okcu", 0, 8, 20))
-karakterler.append(CharacterFactory.create_character("Buyucu", 1, 6, 25))
+     
+     
+motor = game()     
+motor.karakterler.append(CharacterFactory.create_character("Sovalye", 3, 4, 30))
+motor.karakterler.append(CharacterFactory.create_character("Iblis", 1, 2, 45))
+motor.karakterler.append(CharacterFactory.create_character("Okcu", 0, 8, 20))
+motor.karakterler.append(CharacterFactory.create_character("Buyucu", 1, 6, 25))
 
 print ("Oyuna Hosgeldiniz!")
 
 while True:
-    menu =game.menusecimi()
+    secim =game.menusecimi()
       
     if secim in game.menuler:
         game.menuler[secim]()
