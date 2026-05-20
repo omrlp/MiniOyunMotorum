@@ -41,6 +41,12 @@ class gamemodeEditor:
         secim = input("Seciminizi giriniz: ")
         if secim == "1":
             self.karakterekle()
+        if secim == "2":
+            self.karaktersil()    
+        if secim == "3":
+            self.esyaekle()
+        if secim == "4":
+            self.esyasil()
             
     def editorsecimi(self):
         print ("yapmak istiginiz islemi seçebilirsiniz: (1 - yeni karakter ekleme / 2 - karakter silme / 3 - yeni eşya ekleme / 4 - eşya silme)")
@@ -51,7 +57,7 @@ class gamemodeEditor:
         zırh = int(input("Karakterin zırh degerini giriniz: "))
         hasar = int(input("Karakterin hasar degerini giriniz: "))
         can = int(input("Karakterin can degerini giriniz: "))
-        self.karakterler.append(CharacterFactory.create_character(karakter, zırh, hasar, can))
+        karakterler.append(CharacterFactory.create_character(karakter, zırh, hasar, can))
         
     def karaktersil(self):
         print ("Karakter silme moduna gectiniz.")
@@ -67,7 +73,7 @@ class gamemodeEditor:
     def esyaekle(self):
         print ("Esya ekleme moduna gectiniz.")
         esya = input("Eklemek istediginiz esyanin adini giriniz: ")
-        self.esyalar.append(EsyaFactory.create_esya(esya))
+        esyalar.append(EsyaFactory.create_esya(esya))
         
     def esyasil(self):
         print ("Esya silme moduna gectiniz.")
