@@ -96,6 +96,21 @@ class gamemodeEditor:
         esya = input("Eklemek istediginiz esyanin adini giriniz: ")
         esyalar.append(EsyaFactory.create_esya(esya))
         
+        while True:
+            etki = input("Esya etkisi eklemek istiyor musunuz? (E/H): ")
+            if etki.lower() == 'e':
+                kime = input("Etki kime uygulanacak? (kendi/dusman): ")
+                etken = input("Hangi ozellik etkileniyor? (zırh/hasar/can): ")
+                miktar = int(input("Etki miktarini giriniz (pozitif veya negatif): "))
+                yenietki = esyaetkisi(kime, etken, miktar)
+                esyalar[-1].etkiekle(yenietki)
+            elif etki.lower() == 'h':
+                break
+            else:
+                print("Gecersiz secim, lutfen tekrar deneyin.")
+        esyalar.append(EsyaFactory.create_esya(esya))
+        
+        
     def esyasil(self):
         print ("Esya silme moduna gectiniz.")
         for i, esya in enumerate(esyalar):
