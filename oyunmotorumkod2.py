@@ -169,6 +169,21 @@ class gamemodePVP:
                 oyuncu.envanter.append(esyalar[secim - 1])   
         print(f"{oyuncu.name} envanteri hazırlandı.")
         
+    def turoyna(self, saldiran, savunan):
+        print(f"\n[{saldiran.name} turu!] (can durumu: {saldiran.can} / hasar durumu: {saldiran.hasar})")
+        if saldiran.envanter:
+            print("Envanterinizdeki eşyalar:")
+            for i, esya in enumerate(saldiran.envanter):
+                print(f"{i + 1}. {esya.name}")
+            secim = int(input("Kullanmak istediğiniz eşya numarasını giriniz (kullanmazsanız 0): "))
+            if 0 < secim <= len(saldiran.envanter):
+                secilen_esya = saldiran.envanter.pop(secim - 1)
+                secilen_esya.etkileriuygula(saldiran, savunan)
+        if savunan.can > 0:
+            print(f"{saldiran.name}, {saldiran.hasar} 'e hasar saldırıyor...")
+            savunan.can -= saldiran.hasar
+            print(f"{savunan.name} hasar aldı! Kalan can: {savunan.can}")
+        
     def Arena(self,p1,p2):
         print(f"\n╔══════════════════════════════════════════╗")
         print(f"║              {p1.name} VS {p2.name}              ║")
