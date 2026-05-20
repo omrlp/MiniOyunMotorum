@@ -17,7 +17,7 @@ class esyaetkisi(etkilesim):
         self.miktar = miktar
     
     def uygula(self, kullanan, hedef):
-        hedefkarakter = kullanan if self.kime == "kendi" else hedef:
+        hedefkarakter = kullanan if self.kime == "kendi" else hedef
         mevcutdeger = getattr(hedefkarakter, self.etken)    
         yenideger = mevcutdeger + self.miktar
         setattr(hedefkarakter, self.etken, yenideger)
@@ -108,7 +108,7 @@ class gamemodeEditor:
                 break
             else:
                 print("Gecersiz secim, lutfen tekrar deneyin.")
-         esyalar.append(yeniesya)      
+        esyalar.append(yeniesya)      
         
         
     def esyasil(self):
@@ -137,6 +137,7 @@ class gamemodePVP:
         if not esyalar:
             print("Savaşabilmek için sistemde en az 1 eşya olmalı! Lütfen önce Editör'den ekleyin.")
             return
+        self.savasikur()
         
     def savasikur(self):
         print("-----1. OYUNCU KARAKTER SEÇİMİ-----")
@@ -188,6 +189,7 @@ class gamemodePVP:
         print(f"\n╔══════════════════════════════════════════╗")
         print(f"║              {p1.name} VS {p2.name}              ║")
         print(f"╚══════════════════════════════════════════╝")
+        tur=1;
         while p1.can > 0 and p2.can > 0:
             self.turoyna(p1, p2)
             if p2.can <= 0:
@@ -204,6 +206,7 @@ class gamemodePVP:
 class savaskarakteri:
     def __init__(self, karakter):
         self.karakter = karakter
+        self.name = karakter.name
         self.can = karakter.can + (karakter.zırh * 10)
         self.hasar = karakter.hasar
         self.envanter = []
