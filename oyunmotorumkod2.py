@@ -62,7 +62,12 @@ class gamemodeEditor:
             del karakterler[secim - 1]
             print("Karakter silindi.")
         else:
-            print("Gecersiz secim.")    
+            print("Gecersiz secim.")
+            
+    def esyaekle(self):
+        print ("Esya ekleme moduna gectiniz.")
+        esya = input("Eklemek istediginiz esyanin adini giriniz: ")
+        self.esyalar.append(EsyaFactory.create_esya(esya))            
         
         
     
