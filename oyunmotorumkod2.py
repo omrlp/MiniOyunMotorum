@@ -87,7 +87,6 @@ class gamemodeEditor:
             print("Gecersiz secim.")                
         
         
-    
 class gamemodePVP:
     def __init__(self):
         pass
@@ -103,6 +102,48 @@ class gamemodePVP:
         print(f"║              {p1.name} VS {p2.name}              ║")
         print(f"╚══════════════════════════════════════════╝")
     
+
+class characterdecorator(object):
+    def __init__(self, karakter):
+        self._karakter = karakter
+    
+    @property    
+    def name(self):
+        return self._karakter.name   
+    @property
+    def zırh(self):
+        return self._karakter.zırh
+    @property
+    def hasar(self):
+        return self._karakter.hasar
+    @property
+    def can(self):
+        return self._karakter.can
+    @can.setter
+    def can(self, value):
+        self._karakter.can = value  
+        
+class esyadecorator(characterdecorator):
+    def __init__(self, karakter, esya):
+        super().__init__(karakter)
+        self.esya = esya  
+    
+    @property
+    def hasar(self):
+        return super().hasar + 2
+    
+    @property
+    def zırh(self):
+        return super().zırh + 1
+    
+    @property
+    def can(self):
+        return super().can + 5
+    
+              
+    
+
+    
 class gameobjects:
     def __init__(self, name):
         self.name = name
@@ -113,8 +154,7 @@ class characters(gameobjects):
         self.zırh = zırh
         self.hasar = hasar
         self.can = can
-        
-        
+                
 class Esyalar(gameobjects):
     def __init__(self, name):
         super().__init__(name)
@@ -129,8 +169,6 @@ class EsyaFactory:
     def create_esya(esya):
         return Esyalar(esya)  
      
-     
-
 
 oyun = game()     
 karakterler.append(CharacterFactory.create_character("Sovalye", 3, 4, 30))
