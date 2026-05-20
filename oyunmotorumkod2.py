@@ -124,20 +124,63 @@ class gamemodeEditor:
         
         
 class gamemodePVP:
-    def __init__(self):
-        pass
+    def __init__(self,esyalimit=2):
+        self.esyalimit = esyalimit
+        self.hazirsavasesyalari = []
+        
     def run(self):
         print ("PVP moduna Hoşgeldiniz.")
+        
         if len(karakterler) < 2:
             print("Savaşabilmek için sistemde en az 2 karakter olmalı! Lütfen önce Editör'den ekleyin.")
             return
+        if not esyalar:
+            print("Savaşabilmek için sistemde en az 1 eşya olmalı! Lütfen önce Editör'den ekleyin.")
+            return
         
+    def savasikur(self):
+        print("-----1. OYUNCU KARAKTER SEÇİMİ-----")
+        player1 = self.karaktersec()
+        self.esyasec(player1)
+        print("-----2. OYUNCU KARAKTER SEÇİMİ-----")
+        player2 = self.karaktersec()
+        self.esyasec(player2)
+
+    def karaktersec(self):
+        for i, karakter in enumerate(karakterler):
+            print(f"{i + 1}. {karakter.name} (Zırh: {karakter.zırh}, Hasar: {karakter.hasar}, Can: {karakter.can})")
+        secim = int(input("Karakter numarasını giriniz: "))
+        if 0 < secim <= len(karakterler):
+            return savaskarakteri(karakterler[secim - 1])
+        else:
+            print("Geçersiz seçim, varsayılan olarak ilk karakter seçildi.")
+            return savaskarakteri(karakterler[0])
+        
+    def esyasec(self, oyuncu):
+        print(f"{oyuncu.name} için eşya seçim hakkı sayınız: {self.esyalimit} adet")
+        for i in range(self.esyalimit):
+            print("Mevcut eşyalar:")
+            for j, esya in enumerate(esyalar):
+                print(f"{j + 1}. {esya.name}")
+            secim = int(input("Eşya numarasını giriniz (seçim yapmazsanız 0): "))
+            if secim == 0:
+                break   
+            if 0 < secim <= len(esyalar):
+                oyuncu.envanter.append(esyalar[secim - 1])   
+        print(f"{oyuncu.name} envanteri hazırlandı.")
         
     def Arena(self,p1,p2):
         print(f"\n╔══════════════════════════════════════════╗")
         print(f"║              {p1.name} VS {p2.name}              ║")
         print(f"╚══════════════════════════════════════════╝")
     
+
+class savaskarakteri:
+    def __init__(self, karakter):
+        self.karakter = karakter
+        self.can = karakter.can + (karakter.zırh * 10)
+        self.hasar = karakter.hasar
+        self.envanter = []
 
 class characterdecorator(object):
     def __init__(self, karakter):
