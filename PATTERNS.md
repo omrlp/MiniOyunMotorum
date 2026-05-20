@@ -26,3 +26,12 @@ Bakim: tek yerde toplandığı için bakım yapılması kolaylaşmış olacak.
 
 Sonraki düzeltilmiş ve daha esnek yapı:::
 ![Sonraki Yapı](docs/diagrams/Sonra Diyagrami.drawio.png)
+
+FAZ 2 için::: 
+İKİ farklı decorator öruntusu kullandım
+`characterdecorator` ve `esyadecorator` sınıflarında uygulandı.
+
+secme sebebim:  Editörden eklenecek olan dinamik eşya bonuslarının (Can İksiri, Demir tuy vb.) karakterlerin statlarına sadece o vurus anında (gecici olarak) etki etmesi savaş bittiğinde karakter nesnesinin orijinal haline sadık kalması için seçtım
+
+bana yararı : Her yeni eşya için koda elle yeni bir alt sınıf yazma zorunluluğunu (Sınıf Patlamasını) engellemıs oldu. + olarak can ve zırh formullerını bırbırıne bagladıgımda da bunu cok daha rahat çevirmiş olacagım.
+![Sonraki Yapı](docs/diagrams/Sonra Diyagrami2.drawio.png)
