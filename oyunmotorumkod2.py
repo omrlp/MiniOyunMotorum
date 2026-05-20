@@ -188,6 +188,17 @@ class gamemodePVP:
         print(f"\n╔══════════════════════════════════════════╗")
         print(f"║              {p1.name} VS {p2.name}              ║")
         print(f"╚══════════════════════════════════════════╝")
+        while p1.can > 0 and p2.can > 0:
+            self.turoyna(p1, p2)
+            if p2.can <= 0:
+                print(f"\n{p2.name} yenildi (Y-Y) ! KAZANAN : {p1.name} (^O^) !")
+                break
+            self.turoyna(p2, p1)
+            if p1.can <= 0:
+                print(f"\n{p1.name} yenildi (Y-Y) ! KAZANAN : {p2.name} (^O^) !")
+                break
+            tur +=1
+        print ("\nSavaş sona erdi. Teşekkürler!")
     
 
 class savaskarakteri:
