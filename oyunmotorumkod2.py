@@ -67,7 +67,18 @@ class gamemodeEditor:
     def esyaekle(self):
         print ("Esya ekleme moduna gectiniz.")
         esya = input("Eklemek istediginiz esyanin adini giriniz: ")
-        self.esyalar.append(EsyaFactory.create_esya(esya))            
+        self.esyalar.append(EsyaFactory.create_esya(esya))
+        
+    def esyasil(self):
+        print ("Esya silme moduna gectiniz.")
+        for i, esya in enumerate(esyalar):
+            print(f"{i + 1}. {esya.name}")
+        secim = int(input("Silmek istediginiz esyanin numarasini giriniz: "))
+        if 0 < secim <= len(esyalar):
+            del esyalar[secim - 1]
+            print("Esya silindi.")
+        else:
+            print("Gecersiz secim.")                
         
         
     
