@@ -179,6 +179,15 @@ class characters(gameobjects):
 class Esyalar(gameobjects):
     def __init__(self, name):
         super().__init__(name)
+        self.etkiler = []   
+        
+    def etkiekle(self, etki):
+        self.etkiler.append(etki)   
+        
+    def etkileriuygula(self, kullanan, hedef):
+        print(f"[  ^o^  {kullanan.name} {self.name} isimli esyayi kullandi!]")
+        for etki in self.etkiler:
+            etki.uygula(kullanan, hedef)     
      
 class CharacterFactory:
     @staticmethod
