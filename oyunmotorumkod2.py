@@ -53,6 +53,17 @@ class gamemodeEditor:
         can = int(input("Karakterin can degerini giriniz: "))
         self.karakterler.append(CharacterFactory.create_character(karakter, zırh, hasar, can))
         
+    def karaktersil(self):
+        print ("Karakter silme moduna gectiniz.")
+        for i, karakter in enumerate(karakterler):
+            print(f"{i + 1}. {karakter.name}")
+        secim = int(input("Silmek istediginiz karakterin numarasini giriniz: "))
+        if 0 < secim <= len(karakterler):
+            del karakterler[secim - 1]
+            print("Karakter silindi.")
+        else:
+            print("Gecersiz secim.")    
+        
         
     
 class gamemodePVP:
