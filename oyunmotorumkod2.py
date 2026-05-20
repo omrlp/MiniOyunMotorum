@@ -159,25 +159,6 @@ class characterdecorator(object):
     def can(self, value):
         self._karakter.can = value  
         
-class esyadecorator(characterdecorator):
-    def __init__(self, karakter, esya):
-        super().__init__(karakter)
-        self.esya = esya  
-    
-    @property
-    def hasar(self):
-        return super().hasar + 2
-    
-    @property
-    def zırh(self):
-        return super().zırh + 1
-    
-    @property
-    def can(self):
-        return super().can + 5
-    
-              
-    
 
     
 class gameobjects:

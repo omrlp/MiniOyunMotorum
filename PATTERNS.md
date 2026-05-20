@@ -35,3 +35,6 @@ secme sebebim:  Editörden eklenecek olan dinamik eşya bonuslarının (Can İks
 
 bana yararı : Her yeni eşya için koda elle yeni bir alt sınıf yazma zorunluluğunu (Sınıf Patlamasını) engellemıs oldu. + olarak can ve zırh formullerını bırbırıne bagladıgımda da bunu cok daha rahat çevirmiş olacagım.
 ![Sonraki Yapı](docs/diagrams/Sonra Diyagrami2.drawio.png)
+
+guncel olarak esyadecorator classımı sılıp bunun yerıne command oruntusu kullanma kararı aldım. cunku decorator oruntum malesef tum esyalara aynı sarma ıslemlerını yapıyordu ve tek tek ayrı fonksıyonlar kurmam gereklıydı kı bu hıc dınamık olmayacktı. bu yuzden ABC command kullandıgım 'etkilesim' adında bır kod yazdım. ki bu isimizi cok daha esnek ve dınamıklıge uygun hale getırebıldı.
+![Sonraki Yapı](docs/diagrams/Sonra Diyagrami3.drawio.png)
