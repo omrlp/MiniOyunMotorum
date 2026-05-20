@@ -20,3 +20,9 @@ Kolay Genişletilebilirlik: İleride yeni bir karakter tipi veya eşya özelliğ
 Kod Tekrarının Önlenmesi: Oyunun başlangıcında veya gamemodeEditor içinde dinamik karakter eklenirken, karakter oluşturma mantığı tek bir çatı altında standartlastırılmıs oluyor.
 
 Bakim: tek yerde toplandığı için bakım yapılması kolaylaşmış olacak.
+
+Önceki bağımlı ve sıkı yapı:::
+![Önceki Yapı](docs/diagrams/Once Diyagrami.drawio.png) 
+
+Sonraki düzeltilmiş ve daha esnek yapı:::
+![Sonraki Yapı](docs/diagrams/Sonra Diyagrami.drawio.png)
