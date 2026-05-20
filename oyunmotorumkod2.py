@@ -92,7 +92,16 @@ class gamemodePVP:
     def __init__(self):
         pass
     def run(self):
-        print ("PVP moduna gectiniz.")
+        print ("PVP moduna Hoşgeldiniz.")
+        if len(karakterler) < 2:
+            print("Savaşabilmek için sistemde en az 2 karakter olmalı! Lütfen önce Editör'den ekleyin.")
+            return
+        
+        
+    def Arena(self,p1,p2):
+        print(f"\n╔══════════════════════════════════════════╗")
+        print(f"║              {p1.name} VS {p2.name}              ║")
+        print(f"╚══════════════════════════════════════════╝")
     
 class gameobjects:
     def __init__(self, name):
