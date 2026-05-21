@@ -35,7 +35,22 @@ class cancalmasaldiri(saldırıstratejisi):
         spiker.guncelle(f"{saldiran.name} can çalma saldırısı yapıyor! Hasar: {saldiran.hasar}, Can Çalma: {cancalma}")
         savunan.hasaral(saldiran.hasar)
         saldiran.can += cancalma
-        spiker.guncelle(f"{saldiran.name} {cancalma} can çaldı! Güncel can: {saldiran.can}")                         
+        spiker.guncelle(f"{saldiran.name} {cancalma} can çaldı! Güncel can: {saldiran.can}") 
+        
+class stratejideposu:
+    depo = {}
+    
+    @classmethod
+    def stratejikaydet(cls, isim, strateji):
+        cls.depo[isim] = strateji  
+        
+    @classmethod
+    def stratejigetir(cls, isim):
+        return cls.depo.get(isim, normalsaldiri())
+    
+    @classmethod
+    def stratejilerigoster(cls):
+        return list(cls.depo.keys())                          
 
 class etkilesim(ABC):
     def uygula(self, kullanan, hedef):
@@ -194,8 +209,7 @@ class gamemodePVP:
         for i, karakter in enumerate(karakterler):
             print(f"{i + 1}. {karakter.name} (Zırh: {karakter.zırh}, Hasar: {karakter.hasar}, Can: {karakter.can})")
         secim = int(input("Karakter numarasını giriniz: "))
-        stratejisozlugu = {"Normal": normalsaldiri(), "Kritik": kritiksaldiri(), "Can Çalma": cancalmasaldiri()}
-        secilenstrateji = stratejisozlugu.get(karakterler[secim - 1].stratejiadı, normalsaldiri())
+        secilenstrateji = stratejideposu.stratejigetir(karakterler[secim - 1].stratejiadı)
         
         if 0 < secim <= len(karakterler):
             return savaskarakteri(karakterler[secim - 1], secilenstrateji)
@@ -324,8 +338,9 @@ class EsyaFactory:
     def create_esya(esya):
         return Esyalar(esya)  
      
-
-oyun = game()     
+stratejideposu.stratejikaydet("Normal", normalsaldiri())
+stratejideposu.stratejikaydet("Kritik", kritiksaldiri())
+stratejideposu.stratejikaydet("Can Çalma", cancalmasaldiri()) 
 karakterler.append(CharacterFactory.create_character("Sovalye", 3, 4, 30, "Normal"))
 karakterler.append(CharacterFactory.create_character("Iblis", 1, 2, 45, "Kritik"))
 karakterler.append(CharacterFactory.create_character("Okcu", 0, 8, 20, "Normal"))
@@ -343,6 +358,7 @@ sise = EsyaFactory.create_esya("Saka Şisesi")
 sise.etkiekle(esyaetkisi("kendi", "can", 12))
 sise.etkiekle(esyaetkisi("kendi", "hasar", -1))
 esyalar.append(sise)
+oyun = game() 
 
 print ("Oyuna Hosgeldiniz!")
 
