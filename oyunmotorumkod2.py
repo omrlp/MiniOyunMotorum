@@ -1,26 +1,126 @@
-
 import string
+from unicodedata import name
+from abc import ABC, abstractmethod
 
-class game:
+class oyunverikutuphanesi:
     def __init__(self):
         self.karakterler = []
         self.esyalar = []
-        self.menuler = {1: self.gamemodePVP, 2: self.gamemodeEditor, 3: self.exitgame}
- 
-  
+
+
+#1. behavioral sistemim burada. Observer yani gozlemci sistemı
+class gozlemci(ABC):
+    def guncelle(self, mesaj):
+        pass
+    
+class savasspikeri(gozlemci):
+    def guncelle(self, mesaj):
+        print(f"SPİKER: {mesaj}")
+
+#2. behavioral sistemim. Strategy yani strateji sistemi        
+class saldırıstratejisi(ABC):
+    def saldır(self, saldiran, savunan, spiker):
+        pass
+            
+class normalsaldiri(saldırıstratejisi):
+    def saldır(self, saldiran, savunan, spiker):
+        spiker.guncelle(f"{saldiran.name} normal saldırı yapıyor...")
+        savunan.hasaral(saldiran.hasar)
+        
+class kritiksaldiri(saldırıstratejisi):
+    def saldır(self, saldiran, savunan, spiker):
+        kritikhasar = saldiran.hasar * 2
+        spiker.guncelle(f"{saldiran.name} kritik saldırı yapıyor! Hasar: {kritikhasar}")
+        savunan.hasaral(kritikhasar)  
+        
+class cancalmasaldiri(saldırıstratejisi):
+    def saldır(self, saldiran, savunan, spiker):
+        cancalma = int(saldiran.hasar * 0.5)
+        spiker.guncelle(f"{saldiran.name} can çalma saldırısı yapıyor! Hasar: {saldiran.hasar}, Can Çalma: {cancalma}")
+        savunan.hasaral(saldiran.hasar)
+        saldiran.can += cancalma
+        spiker.guncelle(f"{saldiran.name} {cancalma} can çaldı! Güncel can: {saldiran.can}") 
+        
+class stratejideposu:
+    depo = {}
+    
+    @classmethod
+    def stratejikaydet(cls, isim, strateji):
+        cls.depo[isim] = strateji  
+        
+    @classmethod
+    def stratejigetir(cls, isim):
+        return cls.depo.get(isim, normalsaldiri())
+    
+    @classmethod
+    def stratejilerigoster(cls):
+        return list(cls.depo.keys())                          
+
+
+# etkilesim ve esya sistemim
+class etkilesim(ABC):
+    def uygula(self, kullanan, hedef):
+        pass
+    
+class esyaetkisi(etkilesim):
+    def __init__(self, kime, etken , miktar):
+        self.kime = kime
+        self.etken = etken
+        self.miktar = miktar
+    
+    def uygula(self, kullanan, hedef):
+        hedefkarakter = kullanan if self.kime == "kendi" else hedef
+        mevcutdeger = getattr(hedefkarakter, self.etken)    
+        yenideger = mevcutdeger + self.miktar
+        setattr(hedefkarakter, self.etken, yenideger)
+        
+        durum = "artırıldı" if self.miktar > 0 else "azaltıldı"
+        hedefisim = "kendi" if self.kime == "kendi" else "dusmanın"  
+        print(f"{hedefisim} {self.etken} degeri {durum} ({mevcutdeger} -> {yenideger})")
+
+#oyunun motoru burasi
+class game:
+    
+    def __init__(self, verikutuphanesi):
+        self.verikutuphanesi = verikutuphanesi
+        self.menuler = {1:{"isim": "Cikis", "class": None} , 2: {"isim": "Editor", "class": gamemodeEditor(self.verikutuphanesi)}, 3: {"isim": "PVP", "class": gamemodePVP(self.verikutuphanesi)}}
+
     def exitgame(self):
         print ("Oyundan cikiliyor...")
         exit()    
      
     def menusecimi(self):
-        print("Lütfen bir menü seçeneği belirleyin: (1 - PVP / 2 - Editor / 3 - Cikis)")
+        print("Lütfen bir menü seçeneği belirleyin: (1 - Cikis / 2 - Editor / 3 - PVP )")
         secim = input("Seciminizi giriniz: ")
         return int(secim)
         
-    
+    def menucalistir(self):
+        while True:
+            secim = self.menusecimi()
+            
+            if secim == 1:
+                self.exitgame()
+                
+            secilenmode = self.menuler.get(secim)
+            
+            if secilenmode and secilenmode["class"] :
+                secilenmode["class"].run()
+            else:
+                print("Gecersiz secim, lutfen tekrar deneyin.")
 class gamemodeEditor:
-    def __init__(self):
-        pass
+    def __init__(self, verikutuphanesi):
+        self.verikutuphanesi = verikutuphanesi
+        self.islem = {1: self.karakterekle, 2: self.karaktersil, 3: self.esyaekle, 4: self.esyasil}
+    
+    def run(self):
+        self.editorsecimi()
+        secim = input("Seciminizi giriniz: ")
+        islem = self.islem.get(int(secim))
+        if islem:
+            islem()
+        else:
+            print("Gecersiz secim, lutfen tekrar deneyin.")
+            
     def editorsecimi(self):
         print ("yapmak istiginiz islemi seçebilirsiniz: (1 - yeni karakter ekleme / 2 - karakter silme / 3 - yeni eşya ekleme / 4 - eşya silme)")
         
@@ -30,64 +130,226 @@ class gamemodeEditor:
         zırh = int(input("Karakterin zırh degerini giriniz: "))
         hasar = int(input("Karakterin hasar degerini giriniz: "))
         can = int(input("Karakterin can degerini giriniz: "))
-        self.karakterler.append(CharacterFactory.create_character(karakter, zırh, hasar, can))
         
-        
+        print("Strateji secimi: (1 - Normal / 2 - Kritik / 3 - Can Çalma)")
+        stratejisecimi = input("Strateji numarasini giriniz: ")
+        stratejiharitası = {"1": "Normal", "2": "Kritik", "3": "Can Çalma"}
+        strateji = stratejiharitası.get(stratejisecimi, "Normal")
+
+        self.verikutuphanesi.karakterler.append(CharacterFactory.create_character(karakter, zırh, hasar, can, strateji))
     
+    def karaktersil(self):    
+        print ("Karakter silme moduna gectiniz.")
+        for i, karakter in enumerate(self.verikutuphanesi.karakterler):
+            print(f"{i + 1}. {karakter.name}")
+        secim = int(input("Silmek istediginiz karakterin numarasini giriniz: "))
+        if 0 < secim <= len(self.verikutuphanesi.karakterler):
+            del self.verikutuphanesi.karakterler[secim - 1]
+            print("Karakter silindi.")
+        else:
+            print("Gecersiz secim.")
+            
+    def esyaekle(self):
+        print ("Esya ekleme moduna gectiniz.")
+        esya = input("Eklemek istediginiz esyanin adini giriniz: ")
+        yeniesya = EsyaFactory.create_esya(esya)
+        
+        while True:
+            etki = input("Esya etkisi eklemek istiyor musunuz? (E/H): ")
+            if etki.lower() == 'e':
+                kime = input("Etki kime uygulanacak? (kendi/dusman): ")
+                etken = input("Hangi ozellik etkileniyor? (zırh/hasar/can): ")
+                miktar = int(input("Etki miktarini giriniz (pozitif veya negatif): "))
+                yenietki = esyaetkisi(kime, etken, miktar)
+                yeniesya.etkiekle(yenietki)
+            elif etki.lower() == 'h':
+                break
+            else:
+                print("Gecersiz secim, lutfen tekrar deneyin.")
+        self.verikutuphanesi.esyalar.append(yeniesya)      
+        
+        
+    def esyasil(self):
+        print ("Esya silme moduna gectiniz.")
+        for i, esya in enumerate(self.verikutuphanesi.esyalar):
+            print(f"{i + 1}. {esya.name}")
+        secim = int(input("Silmek istediginiz esyanin numarasini giriniz: "))
+        if 0 < secim <= len(self.verikutuphanesi.esyalar):
+            del self.verikutuphanesi.esyalar[secim - 1]
+            print("Esya silindi.")
+        else:
+            print("Gecersiz secim.")                       
 class gamemodePVP:
-    def __init__(self):
-        pass
+    def __init__(self, verikutuphanesi, esyalimit=2):
+        self.verikutuphanesi = verikutuphanesi
+        self.esyalimit = esyalimit
+        self.hazirsavasesyalari = []
+        
+    def run(self):
+        print ("PVP moduna Hoşgeldiniz.")
+        
+        if len(self.verikutuphanesi.karakterler) < 2:
+            print("Savaşabilmek için sistemde en az 2 karakter olmalı! Lütfen önce Editör'den ekleyin.")
+            return
+        if not self.verikutuphanesi.esyalar:
+            print("Savaşabilmek için sistemde en az 1 eşya olmalı! Lütfen önce Editör'den ekleyin.")
+            return
+        self.savasikur()
+        
+    def savasikur(self):
+        print("-----1. OYUNCU KARAKTER SEÇİMİ-----")
+        player1 = self.karaktersec()
+        self.esyasec(player1)
+        print("-----2. OYUNCU KARAKTER SEÇİMİ-----")
+        player2 = self.karaktersec()
+        self.esyasec(player2)
+        
+        spiker = savasspikeri()
+        player1.spikerekle(spiker)
+        player2.spikerekle(spiker)
+        
+        self.Arena(player1, player2)
+
+    def karaktersec(self):
+        for i, karakter in enumerate(self.verikutuphanesi.karakterler):
+            print(f"{i + 1}. {karakter.name} (Zırh: {karakter.zırh}, Hasar: {karakter.hasar}, Can: {karakter.can})")
+        secim = int(input("Karakter numarasını giriniz: "))
+        if 0 < secim <= len(self.verikutuphanesi.karakterler):
+            secilenkarakter = self.verikutuphanesi.karakterler[secim - 1]
+            secilenstrateji = stratejideposu.stratejigetir(self.verikutuphanesi.karakterler[secim - 1].stratejiadı)
+            return savaskarakteri(secilenkarakter, secilenstrateji)
+        else:
+            print("Geçersiz seçim, varsayılan olarak ilk karakter seçildi.")
+            varsayilan = self.verikutuphanesi.karakterler[0]
+            secilenstrateji = stratejideposu.stratejigetir(self.verikutuphanesi.karakterler[0].stratejiadı)
+            return savaskarakteri(varsayilan, secilenstrateji)
+        
+    def esyasec(self, oyuncu):
+        print(f"{oyuncu.name} için eşya seçim hakkı sayınız: {self.esyalimit} adet")
+        for i in range(self.esyalimit):
+            print("Mevcut eşyalar:")
+            for j, esya in enumerate(self.verikutuphanesi.esyalar):
+                print(f"{j + 1}. {esya.name}")
+            secim = int(input("Eşya numarasını giriniz (seçim yapmazsanız 0): "))
+            if secim == 0:
+                break   
+            if 0 < secim <= len(self.verikutuphanesi.esyalar):
+                oyuncu.envanter.append(self.verikutuphanesi.esyalar[secim - 1])   
+        print(f"{oyuncu.name} envanteri hazırlandı.")
+        
+    def turoyna(self, saldiran, savunan):
+        print(f"\n[{saldiran.name} turu!] (can durumu: {saldiran.can} / hasar durumu: {saldiran.hasar})")
+        if saldiran.envanter:
+            print("Envanterinizdeki eşyalar:")
+            for i, esya in enumerate(saldiran.envanter):
+                print(f"{i + 1}. {esya.name}")
+            secim = int(input("Kullanmak istediğiniz eşya numarasını giriniz (kullanmazsanız 0): "))
+            if 0 < secim <= len(saldiran.envanter):
+                secilen_esya = saldiran.envanter.pop(secim - 1)
+                secilen_esya.etkileriuygula(saldiran, savunan)
+        if savunan.can > 0:
+            spikernesnesi = saldiran.spikerler[0] if saldiran.spikerler else savasspikeri()
+            saldiran.strateji.saldır(saldiran, savunan, spikernesnesi)
+        
+    def Arena(self,p1,p2):
+        print(f"\n╔══════════════════════════════════════════╗")
+        print(f"║              {p1.name} VS {p2.name}              ║")
+        print(f"╚══════════════════════════════════════════╝")
+        tur=1;
+        while p1.can > 0 and p2.can > 0:
+            self.turoyna(p1, p2)
+            if p2.can <= 0:
+                print(f"\n{p2.name} yenildi (Y-Y) ! KAZANAN : {p1.name} (^O^) !")
+                break
+            self.turoyna(p2, p1)
+            if p1.can <= 0:
+                print(f"\n{p1.name} yenildi (Y-Y) ! KAZANAN : {p2.name} (^O^) !")
+                break
+            tur +=1
+        print ("\nSavaş sona erdi. Teşekkürler!")
     
+class savaskarakteri:
+    def __init__(self, karakter, strateji):
+        self.karakter = karakter
+        self.name = karakter.name
+        self.zırh = karakter.zırh
+        self.can = karakter.can + (karakter.zırh * 10)
+        self.hasar = karakter.hasar
+        self.envanter = []
+        self.spikerler = []
+        self.strateji = strateji
+        
+    def spikerekle(self, spiker):
+        self.spikerler.append(spiker)
+        
+    def hasaral(self, miktar):
+        self.can -= miktar
+        for spiker in self.spikerler:
+            spiker.guncelle(f"{self.name} {miktar} hasar aldı! Kalan can: {self.can}")        
+
+#nesnelerin ana classlari burda        
 class gameobjects:
-    def update(self):
-        pass
+    def __init__(self, name):
+        self.name = name
 
 class characters(gameobjects):
-    def __init__(self, character, zırh, hasar, can):
-        self.character = character
+    def __init__(self, name, zırh, hasar, can,stratejiadı = "Normal"):
+        super().__init__(name)
         self.zırh = zırh
         self.hasar = hasar
         self.can = can
-        def character_zırh(self):
-            pass
-        def character_hasar(self):
-            pass
-        def character_can(self):
-            pass
+        self.stratejiadı = stratejiadı
+                
+class Esyalar(gameobjects):
+    def __init__(self, name):
+        super().__init__(name)
+        self.etkiler = []   
         
-class Esyalar(gameObjects):
-    def __init__(self, esya):
-        self.esya = esya
+    def etkiekle(self, etki):
+        self.etkiler.append(etki)   
+        
+    def etkileriuygula(self, kullanan, hedef):
+        print(f"[  ^o^  {kullanan.name} {self.name} isimli esyayi kullandi!]")
+        for etki in self.etkiler:
+            etki.uygula(kullanan, hedef)     
 
-    def ozellikler(self):
-        pass
-    def etkihasar(self):
-        pass
-    def etkican(self):
-        pass
-    def etkizırh(self):
-        pass
+#factory örüntüsü classlarım     
+class CharacterFactory:
+    @staticmethod
+    def create_character(name ,zırh, hasar, can, stratejiadı = "Normal"):
+        return characters(name, zırh, hasar, can, stratejiadı)
      
+class EsyaFactory:
+    @staticmethod
+    def create_esya(esya):
+        return Esyalar(esya) 
+     
+veritabanı = oyunverikutuphanesi()     
+stratejideposu.stratejikaydet("Normal", normalsaldiri())
+stratejideposu.stratejikaydet("Kritik", kritiksaldiri())
+stratejideposu.stratejikaydet("Can Çalma", cancalmasaldiri()) 
+veritabanı.karakterler.append(CharacterFactory.create_character("Sovalye", 3, 4, 30, "Normal"))
+veritabanı.karakterler.append(CharacterFactory.create_character("Iblis", 1, 2, 45, "Kritik"))
+veritabanı.karakterler.append(CharacterFactory.create_character("Okcu", 0, 8, 20, "Normal"))
+veritabanı.karakterler.append(CharacterFactory.create_character("Buyucu", 1, 6, 25, "Can Çalma"))
+iksir = EsyaFactory.create_esya("Can İksiri")
+iksir.etkiekle(esyaetkisi("kendi", "can", 5))
+veritabanı.esyalar.append(iksir)
+sopa = EsyaFactory.create_esya("Tanrının Sopası")
+sopa.etkiekle(esyaetkisi("dusman", "can", -5))
+veritabanı.esyalar.append(sopa)
+tuy = EsyaFactory.create_esya("Demir Tüy")
+tuy.etkiekle(esyaetkisi("kendi", "hasar", 2))
+veritabanı.esyalar.append(tuy)
+sise = EsyaFactory.create_esya("Saka Şisesi")
+sise.etkiekle(esyaetkisi("kendi", "can", 12))
+sise.etkiekle(esyaetkisi("kendi", "hasar", -1))
+veritabanı.esyalar.append(sise)
 
-
-karakterler.append(CharacterFactory.create_character("Sovalye", 3, 4, 30))
-karakterler.append(CharacterFactory.create_character("Iblis", 1, 2, 45))
-karakterler.append(CharacterFactory.create_character("Okcu", 0, 8, 20))
-karakterler.append(CharacterFactory.create_character("Buyucu", 1, 6, 25))
+oyun = game (veritabanı) 
 
 print ("Oyuna Hosgeldiniz!")
 
-while True:
-    menu =game.menusecimi()
-      
-    if secim in game.menuler:
-        game.menuler[secim]()
-    else:
-        print("Gecersiz secim, lutfen tekrar deneyin.")    
-    
+oyun.menucalistir()
 
-#if (menu == 1) #pvp için yaptım
-	#print (" 1 numaralı oyuncu karakterini seçebilir:")
-  
-#else if (menu == 2) #editor modu içinyaptım
-	#print ("yapmak istiginiz islemi seçebilirsiniz: (1 - yeni karakter ekleme / 2 - karakter silme / 3 - yeni eşya ekleme / 4 - eşya silme)")
+    
