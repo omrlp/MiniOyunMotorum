@@ -4,6 +4,11 @@ from abc import ABC, abstractmethod
 
 karakterler = []
 esyalar = []
+class oyunverikutuphanesi:
+    def __init__(self):
+        self.karakterler = []
+        self.esyalar = []
+
 
 #1. behavioral sistemim burada. Observer yani gozlemci sistemı
 class gozlemci(ABC):
@@ -78,8 +83,9 @@ class esyaetkisi(etkilesim):
 #oyunun motoru burasi
 class game:
     
-    def __init__(self):
-        self.menuler = {1:{"isim": "Cikis", "class": None} , 2: {"isim": "Editor", "class": gamemodeEditor()}, 3: {"isim": "PVP", "class": gamemodePVP()}}
+    def __init__(self, verikutuphanesi):
+        self.verikutuphanesi = verikutuphanesi
+        self.menuler = {1:{"isim": "Cikis", "class": None} , 2: {"isim": "Editor", "class": gamemodeEditor(self.verikutuphanesi)}, 3: {"isim": "PVP", "class": gamemodePVP(self.verikutuphanesi)}}
 
     def exitgame(self):
         print ("Oyundan cikiliyor...")
@@ -104,8 +110,8 @@ class game:
             else:
                 print("Gecersiz secim, lutfen tekrar deneyin.")
 class gamemodeEditor:
-    def __init__(self):
-        pass
+    def __init__(self, verikutuphanesi):
+        self.verikutuphanesi = verikutuphanesi
     
     def run(self):
         self.editorsecimi()
@@ -178,7 +184,8 @@ class gamemodeEditor:
         else:
             print("Gecersiz secim.")                       
 class gamemodePVP:
-    def __init__(self,esyalimit=2):
+    def __init__(self, verikutuphanesi, esyalimit=2):
+        self.verikutuphanesi = verikutuphanesi
         self.esyalimit = esyalimit
         self.hazirsavasesyalari = []
         
@@ -339,7 +346,8 @@ sise = EsyaFactory.create_esya("Saka Şisesi")
 sise.etkiekle(esyaetkisi("kendi", "can", 12))
 sise.etkiekle(esyaetkisi("kendi", "hasar", -1))
 esyalar.append(sise)
-oyun = game() 
+veritabanı = oyunverikutuphanesi()
+oyun = game (veritabanı) 
 
 print ("Oyuna Hosgeldiniz!")
 
