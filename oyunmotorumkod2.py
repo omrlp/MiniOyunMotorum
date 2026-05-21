@@ -146,6 +146,7 @@ class gamemodePVP:
         print("-----2. OYUNCU KARAKTER SEÇİMİ-----")
         player2 = self.karaktersec()
         self.esyasec(player2)
+        self.Arena(player1, player2)
 
     def karaktersec(self):
         for i, karakter in enumerate(karakterler):
@@ -181,7 +182,7 @@ class gamemodePVP:
                 secilen_esya = saldiran.envanter.pop(secim - 1)
                 secilen_esya.etkileriuygula(saldiran, savunan)
         if savunan.can > 0:
-            print(f"{saldiran.name}, {saldiran.hasar} 'e hasar saldırıyor...")
+            print(f"{saldiran.name}, {savunan.name}'e {saldiran.hasar} hasar saldırıyor...")
             savunan.can -= saldiran.hasar
             print(f"{savunan.name} hasar aldı! Kalan can: {savunan.can}")
         
@@ -207,6 +208,7 @@ class savaskarakteri:
     def __init__(self, karakter):
         self.karakter = karakter
         self.name = karakter.name
+        self.zırh = karakter.zırh
         self.can = karakter.can + (karakter.zırh * 10)
         self.hasar = karakter.hasar
         self.envanter = []
@@ -273,6 +275,19 @@ karakterler.append(CharacterFactory.create_character("Sovalye", 3, 4, 30))
 karakterler.append(CharacterFactory.create_character("Iblis", 1, 2, 45))
 karakterler.append(CharacterFactory.create_character("Okcu", 0, 8, 20))
 karakterler.append(CharacterFactory.create_character("Buyucu", 1, 6, 25))
+iksir = EsyaFactory.create_esya("Can İksiri")
+iksir.etkiekle(esyaetkisi("kendi", "can", 5))
+esyalar.append(iksir)
+sopa = EsyaFactory.create_esya("Tanrının Sopası")
+sopa.etkiekle(esyaetkisi("dusman", "can", -5))
+esyalar.append(sopa)
+tuy = EsyaFactory.create_esya("Demir Tüy")
+tuy.etkiekle(esyaetkisi("kendi", "hasar", 2))
+esyalar.append(tuy)
+sise = EsyaFactory.create_esya("Saka Şisesi")
+sise.etkiekle(esyaetkisi("kendi", "can", 12))
+sise.etkiekle(esyaetkisi("kendi", "hasar", -1))
+esyalar.append(sise)
 
 print ("Oyuna Hosgeldiniz!")
 
