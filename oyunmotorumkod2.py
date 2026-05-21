@@ -222,7 +222,7 @@ class gamemodePVP:
             print("Geçersiz seçim, varsayılan olarak ilk karakter seçildi.")
             varsayilan = self.verikutuphanesi.karakterler[0]
             secilenstrateji = stratejideposu.stratejigetir(self.verikutuphanesi.karakterler[0].stratejiadı)
-            return savaskarakteri(secilenkarakter, secilenstrateji)
+            return savaskarakteri(varsayilan, secilenstrateji)
         
     def esyasec(self, oyuncu):
         print(f"{oyuncu.name} için eşya seçim hakkı sayınız: {self.esyalimit} adet")
