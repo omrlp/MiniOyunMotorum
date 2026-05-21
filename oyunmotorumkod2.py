@@ -15,22 +15,22 @@ class savasspikeri(gozlemci):
         print(f"SPİKER: {mesaj}")
         
 class saldırıstratejisi(ABC):
-    def saldır(self, saldiran, savunan):
+    def saldır(self, saldiran, savunan, spiker):
         pass
             
 class normalsaldiri(saldırıstratejisi):
-    def saldır(self, saldiran, savunan):
+    def saldır(self, saldiran, savunan, spiker):
         spiker.guncelle(f"{saldiran.name} normal saldırı yapıyor...")
         savunan.hasaral(saldiran.hasar)
         
 class kritiksaldiri(saldırıstratejisi):
-    def saldır(self, saldiran, savunan):
+    def saldır(self, saldiran, savunan, spiker):
         kritikhasar = saldiran.hasar * 2
         spiker.guncelle(f"{saldiran.name} kritik saldırı yapıyor! Hasar: {kritikhasar}")
         savunan.hasaral(kritikhasar)  
         
 class cancalmasaldiri(saldırıstratejisi):
-    def saldır(self, saldiran, savunan):
+    def saldır(self, saldiran, savunan, spiker):
         cancalma = int(saldiran.hasar * 0.5)
         spiker.guncelle(f"{saldiran.name} can çalma saldırısı yapıyor! Hasar: {saldiran.hasar}, Can Çalma: {cancalma}")
         savunan.hasaral(saldiran.hasar)
@@ -194,11 +194,14 @@ class gamemodePVP:
         for i, karakter in enumerate(karakterler):
             print(f"{i + 1}. {karakter.name} (Zırh: {karakter.zırh}, Hasar: {karakter.hasar}, Can: {karakter.can})")
         secim = int(input("Karakter numarasını giriniz: "))
+        stratejisozlugu = {"Normal": normalsaldiri(), "Kritik": kritiksaldiri(), "Can Çalma": cancalmasaldiri()}
+        secilenstrateji = stratejisozlugu.get(karakterler[secim - 1].stratejiadı, normalsaldiri())
+        
         if 0 < secim <= len(karakterler):
-            return savaskarakteri(karakterler[secim - 1])
+            return savaskarakteri(karakterler[secim - 1], secilenstrateji)
         else:
             print("Geçersiz seçim, varsayılan olarak ilk karakter seçildi.")
-            return savaskarakteri(karakterler[0])
+            return savaskarakteri(karakterler[0], secilenstrateji)
         
     def esyasec(self, oyuncu):
         print(f"{oyuncu.name} için eşya seçim hakkı sayınız: {self.esyalimit} adet")
@@ -224,8 +227,8 @@ class gamemodePVP:
                 secilen_esya = saldiran.envanter.pop(secim - 1)
                 secilen_esya.etkileriuygula(saldiran, savunan)
         if savunan.can > 0:
-            print(f"{saldiran.name}, {savunan.name}'e {saldiran.hasar} hasar saldırıyor...")
-            savunan.hasaral(saldiran.hasar)
+            spikernesnesi = saldiran.spikerler[0] if saldiran.spikerler else savasspikeri()
+            saldiran.strateji.saldır(saldiran, savunan, spikernesnesi)
         
     def Arena(self,p1,p2):
         print(f"\n╔══════════════════════════════════════════╗")
@@ -246,15 +249,15 @@ class gamemodePVP:
     
 
 class savaskarakteri:
-    def __init__(self, karakter):
+    def __init__(self, karakter, strateji):
         self.karakter = karakter
         self.name = karakter.name
         self.zırh = karakter.zırh
         self.can = karakter.can + (karakter.zırh * 10)
         self.hasar = karakter.hasar
         self.envanter = []
-        
         self.spikerler = []
+        self.strateji = strateji
         
     def spikerekle(self, spiker):
         self.spikerler.append(spiker)
@@ -296,7 +299,7 @@ class characters(gameobjects):
         self.zırh = zırh
         self.hasar = hasar
         self.can = can
-        self.startejiadı = stratejiadı
+        self.stratejiadı = stratejiadı
                 
 class Esyalar(gameobjects):
     def __init__(self, name):
@@ -323,10 +326,10 @@ class EsyaFactory:
      
 
 oyun = game()     
-karakterler.append(CharacterFactory.create_character("Sovalye", 3, 4, 30))
-karakterler.append(CharacterFactory.create_character("Iblis", 1, 2, 45))
-karakterler.append(CharacterFactory.create_character("Okcu", 0, 8, 20))
-karakterler.append(CharacterFactory.create_character("Buyucu", 1, 6, 25))
+karakterler.append(CharacterFactory.create_character("Sovalye", 3, 4, 30, "Normal"))
+karakterler.append(CharacterFactory.create_character("Iblis", 1, 2, 45, "Kritik"))
+karakterler.append(CharacterFactory.create_character("Okcu", 0, 8, 20, "Normal"))
+karakterler.append(CharacterFactory.create_character("Buyucu", 1, 6, 25, "Can Çalma"))
 iksir = EsyaFactory.create_esya("Can İksiri")
 iksir.etkiekle(esyaetkisi("kendi", "can", 5))
 esyalar.append(iksir)
