@@ -1,3 +1,16 @@
 # MiniOyunMotorum
 Yazılım Tasarım Örüntüleri Ödevim içindir. 
 Selaam ben Ömeralp . Yazılım Tasarım Örüntüleri ödevim için C şıkkı = Mini Oyun Motorunu seçtim. Zaten İlk günden beri video oyunları yapmak ve Ülkemizi oyun sektörü namına daha iyi bir noktaya taşımak istediğimi; karakter tasarlama, sinematik, müzik, senaryo - hikaye terimlerini yazılımla birleştirerek cok daha başarılı ürünler ortaya koyabileceğimi söylüyordum. Sanata olan tutkumu yazılıma yansıtarak elimden gelen en iyi çalışmayı ortaya koymaya çalışacağım. Bu ödevin beni olumlu etkileyeceğini düşünüyorum ve umarım öyle de olur.
+
+
+EVEEET Kodumu bitirdim ve artık elimde gerçekten çalışan ve yuksek orantıda SOLİD prensiplerine uygun bir kaç farklı pattern kullandıgım bır kod var.
+Projenin ne yaptığı:::
+Projemde bır oyun motoru yazdım bumotorda halihazırda 4 adet karakter ve 4 adet eşya bulunmakta. Editor ve PVP seklinde iki ayrı menusu var. Editor menusunde dilediğiniz gibi karakterler ve esyalar, ekleyebılır ve silebilirsiniz. PVP modu ise aslında esyaların kullanımı ile sırayla oynanan bır oyundur. esyalar bıttıgınde her ıkı tarafta bırbırıne sırayla vuruslar atacaktır( yani esyalar bıttıgınde oyun bır anda bıtınce bunu bır hata sanmayın zaten heyecanı burada = son esya kullanıldıgında kazandım mı kaybettım mı heyecanı ıcın yapılmıs bır oyundur). Bunlar dısında karakterlerin ozellikleri can ,zırh , hasar ve stratejı gıbı ozelliklerden olusmaktadır ve esyaların bu dgerler ustunde degısıklık hakları vardır.
+Kullanılan tüm örüntülerin listesi ve kısa açıklamaları:::
+ilk olarak Observer (Gozlemci) öruntusu kullandım gozlemci, savasspikeri sınıflarında ve savaskarakteri içerisindeki spikerekle metodunda.	Savaş karakterinin canı azaldığında veya hasar aldıgında spikere otomatik haber ucmus oluyor (ki bunu spiker.guncelle methoduyla yapıyorum)
+ikinci kullandıgım pattern Factory Method (Fabrika).characterfactory ve esyafactory sınıflarında kullandım ki hemen hemen en basından beri kullanıyorum desem yeridir.	characters ve Esyalar nesnelerini doğrudan newlemek yerine uretim sorumluluğunu bu fabrikalara verıp olusturmus oluyorum.
+ucuncu olarak Strategy (Strateji) örüntüsü kullandım diyebilirim.	saldırıstratejisi, normalsaldiri, kritiksaldiri, cancalmasaldiri sınıflarında zaten kullandım ama menuyu normal sekılde gamemodeEditor ve gamemodePVP olarak ayırırken de aslında bır stratejı oruntusu kurmus oldum.	Karakterlerin savaş esnasında yapacağı saldırı davranışlarını dinamik olarak değiştirmeyi sağlarken gamemodePVP ve gamemodeEditorde ise rahatça birbirleri arasında geçiş yapabilmelerini sağlıyor.
+ve dördüncü olarak Registry (Kayıt Deposu) kullanımım var.	stratejideposu sınıfında bunu göruyoruz .Stratejileri bir sözlükte (depo seklinde) toplayıp isimle çağrılabilir hale getirmıs oluyorum. Bu mimari Strategy pattern'ı destekleyen harika bir yardımcı oruntu gorevı goruyor.
+Mimari diyagram (görsel):::(docs/diagrams/Sonra Diyagrami5.drawio.png)
+Nasıl çalıştırılır::::
+Aslında kodu normal python terminalinde calıstırmanız yeterli. oyuna hosgeldiniz yazısıyla beraber menü sayiları onunuze gelecektir. her turlu ıslemınızde menunun sıze verdıgı talımatları ve ozellıkle parantez ıclerını takıp etmenızı öneririm. teşekkürkler :)
