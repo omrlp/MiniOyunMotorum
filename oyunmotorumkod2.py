@@ -110,18 +110,16 @@ class game:
 class gamemodeEditor:
     def __init__(self, verikutuphanesi):
         self.verikutuphanesi = verikutuphanesi
+        self.islem = {1: self.karakterekle, 2: self.karaktersil, 3: self.esyaekle, 4: self.esyasil}
     
     def run(self):
         self.editorsecimi()
         secim = input("Seciminizi giriniz: ")
-        if secim == "1":
-            self.karakterekle()
-        if secim == "2":
-            self.karaktersil()    
-        if secim == "3":
-            self.esyaekle()
-        if secim == "4":
-            self.esyasil()
+        islem = self.islem.get(int(secim))
+        if islem:
+            islem()
+        else:
+            print("Gecersiz secim, lutfen tekrar deneyin.")
             
     def editorsecimi(self):
         print ("yapmak istiginiz islemi seçebilirsiniz: (1 - yeni karakter ekleme / 2 - karakter silme / 3 - yeni eşya ekleme / 4 - eşya silme)")
@@ -216,13 +214,15 @@ class gamemodePVP:
         for i, karakter in enumerate(self.verikutuphanesi.karakterler):
             print(f"{i + 1}. {karakter.name} (Zırh: {karakter.zırh}, Hasar: {karakter.hasar}, Can: {karakter.can})")
         secim = int(input("Karakter numarasını giriniz: "))
-        secilenstrateji = stratejideposu.stratejigetir(self.verikutuphanesi.karakterler[secim - 1].stratejiadı)
-        
         if 0 < secim <= len(self.verikutuphanesi.karakterler):
-            return savaskarakteri(self.verikutuphanesi.karakterler[secim - 1], secilenstrateji)
+            secilenkarakter = self.verikutuphanesi.karakterler[secim - 1]
+            secilenstrateji = stratejideposu.stratejigetir(self.verikutuphanesi.karakterler[secim - 1].stratejiadı)
+            return savaskarakteri(secilenkarakter, secilenstrateji)
         else:
             print("Geçersiz seçim, varsayılan olarak ilk karakter seçildi.")
-            return savaskarakteri(self.verikutuphanesi.karakterler[0], secilenstrateji)
+            varsayilan = self.verikutuphanesi.karakterler[0]
+            secilenstrateji = stratejideposu.stratejigetir(self.verikutuphanesi.karakterler[0].stratejiadı)
+            return savaskarakteri(secilenkarakter, secilenstrateji)
         
     def esyasec(self, oyuncu):
         print(f"{oyuncu.name} için eşya seçim hakkı sayınız: {self.esyalimit} adet")
