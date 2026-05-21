@@ -197,8 +197,7 @@ class gamemodePVP:
                 secilen_esya.etkileriuygula(saldiran, savunan)
         if savunan.can > 0:
             print(f"{saldiran.name}, {savunan.name}'e {saldiran.hasar} hasar saldırıyor...")
-            savunan.can -= saldiran.hasar
-            print(f"{savunan.name} hasar aldı! Kalan can: {savunan.can}")
+            savunan.hasaral(saldiran.hasar)
         
     def Arena(self,p1,p2):
         print(f"\n╔══════════════════════════════════════════╗")
