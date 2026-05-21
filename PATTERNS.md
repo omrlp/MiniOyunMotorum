@@ -38,3 +38,13 @@ bana yararı : Her yeni eşya için koda elle yeni bir alt sınıf yazma zorunlu
 
 guncel olarak esyadecorator classımı sılıp bunun yerıne command oruntusu kullanma kararı aldım. cunku decorator oruntum malesef tum esyalara aynı sarma ıslemlerını yapıyordu ve tek tek ayrı fonksıyonlar kurmam gereklıydı kı bu hıc dınamık olmayacktı. bu yuzden ABC command kullandıgım 'etkilesim' adında bır kod yazdım. ki bu isimizi cok daha esnek ve dınamıklıge uygun hale getırebıldı.
 ![Sonraki Yapı](docs/diagrams/Sonra Diyagrami3.drawio.png)
+
+
+EVET kodumu hemen hemen bıtırmısım gıbı hıssedıyorum sahsen. bır cok farklı pattern kullandım ve solide uygun oldugunu dusunuyorum. ve tabi hala ai log phase3.md asamasını yapmadım. ama şimdi patternlerimden tekrar bahsederek sizi güncelleyecegım ve patterns.md dosyamızı tamamlamış olacagım.
+
+ilk olarak Observer (Gozlemci) öruntusu kullandım gozlemci, savasspikeri sınıflarında ve savaskarakteri içerisindeki spikerekle metodunda.	Savaş karakterinin canı azaldığında veya hasar aldıgında spikere otomatik haber ucmus oluyor (ki bunu spiker.guncelle methoduyla yapıyorum)
+ikinci kullandıgım pattern Factory Method (Fabrika).characterfactory ve esyafactory sınıflarında kullandım ki hemen hemen en basından beri kullanıyorum desem yeridir.	characters ve Esyalar nesnelerini doğrudan newlemek yerine uretim sorumluluğunu bu fabrikalara verıp olusturmus oluyorum.
+ucuncu olarak Strategy (Strateji) örüntüsü kullandım diyebilirim.	saldırıstratejisi, normalsaldiri, kritiksaldiri, cancalmasaldiri sınıflarında zaten kullandım ama menuyu normal sekılde gamemodeEditor ve gamemodePVP olarak ayırırken de aslında bır stratejı oruntusu kurmus oldum.	Karakterlerin savaş esnasında yapacağı saldırı davranışlarını dinamik olarak değiştirmeyi sağlarken gamemodePVP ve gamemodeEditorde ise rahatça birbirleri arasında geçiş yapabilmelerini sağlıyor.
+ve dördüncü olarak Registry (Kayıt Deposu) kullanımım var.	stratejideposu sınıfında bunu göruyoruz .Stratejileri bir sözlükte (depo seklinde) toplayıp isimle çağrılabilir hale getirmıs oluyorum. Bu mimari Strategy pattern'ı destekleyen harika bir yardımcı oruntu gorevı goruyor.
+Ve son olarak uzucu bır sekılde characterdecoratore veda ediyoruz. Aslında kesınlıkle işime yarayacagını dusunerek yazmıstım ama kenarda dururken onun gorevını zaten yapan bambaska kodlar devreye gırdı desem yeridir. karakter sec methodumda zaten gerekenı yapıyorum ve characterfactoryde de zaten uretımımı tamamıyoum. ustunu sarmak gıbı bır kaygım otomatıkmen ortadan kalkmıs oluyor. bu yuzden decoratoru kaldırdım ve hayalet gıbı kodumun ıcınde kalmasını ıstemedım.
+![Sonraki Yapı](docs/diagrams/Sonra Diyagrami4.drawio.png)
