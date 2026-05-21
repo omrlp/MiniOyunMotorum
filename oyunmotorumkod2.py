@@ -1,4 +1,3 @@
-
 import string
 from unicodedata import name
 from abc import ABC, abstractmethod
@@ -6,6 +5,7 @@ from abc import ABC, abstractmethod
 karakterler = []
 esyalar = []
 
+#1. behavioral sistemim burada. Observer yani gozlemci sistemı
 class gozlemci(ABC):
     def guncelle(self, mesaj):
         pass
@@ -13,7 +13,8 @@ class gozlemci(ABC):
 class savasspikeri(gozlemci):
     def guncelle(self, mesaj):
         print(f"SPİKER: {mesaj}")
-        
+
+#2. behavioral sistemim. Strategy yani strateji sistemi        
 class saldırıstratejisi(ABC):
     def saldır(self, saldiran, savunan, spiker):
         pass
@@ -52,6 +53,8 @@ class stratejideposu:
     def stratejilerigoster(cls):
         return list(cls.depo.keys())                          
 
+
+# etkilesim ve esya sistemim
 class etkilesim(ABC):
     def uygula(self, kullanan, hedef):
         pass
@@ -72,6 +75,7 @@ class esyaetkisi(etkilesim):
         hedefisim = "kendi" if self.kime == "kendi" else "dusmanın"  
         print(f"{hedefisim} {self.etken} degeri {durum} ({mevcutdeger} -> {yenideger})")
 
+#oyunun motoru burasi
 class game:
     
     def __init__(self):
@@ -172,9 +176,7 @@ class gamemodeEditor:
             del esyalar[secim - 1]
             print("Esya silindi.")
         else:
-            print("Gecersiz secim.")                
-        
-        
+            print("Gecersiz secim.")                       
 class gamemodePVP:
     def __init__(self,esyalimit=2):
         self.esyalimit = esyalimit
@@ -261,7 +263,6 @@ class gamemodePVP:
             tur +=1
         print ("\nSavaş sona erdi. Teşekkürler!")
     
-
 class savaskarakteri:
     def __init__(self, karakter, strateji):
         self.karakter = karakter
@@ -281,28 +282,7 @@ class savaskarakteri:
         for spiker in self.spikerler:
             spiker.guncelle(f"{self.name} {miktar} hasar aldı! Kalan can: {self.can}")        
 
-class characterdecorator(object):
-    def __init__(self, karakter):
-        self._karakter = karakter
-    
-    @property    
-    def name(self):
-        return self._karakter.name   
-    @property
-    def zırh(self):
-        return self._karakter.zırh
-    @property
-    def hasar(self):
-        return self._karakter.hasar
-    @property
-    def can(self):
-        return self._karakter.can
-    @can.setter
-    def can(self, value):
-        self._karakter.can = value  
-        
-
-    
+#nesnelerin ana classlari burda        
 class gameobjects:
     def __init__(self, name):
         self.name = name
@@ -327,7 +307,8 @@ class Esyalar(gameobjects):
         print(f"[  ^o^  {kullanan.name} {self.name} isimli esyayi kullandi!]")
         for etki in self.etkiler:
             etki.uygula(kullanan, hedef)     
-     
+
+#factory örüntüsü classlarım     
 class CharacterFactory:
     @staticmethod
     def create_character(name ,zırh, hasar, can, stratejiadı = "Normal"):
