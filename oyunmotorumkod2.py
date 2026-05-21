@@ -155,6 +155,11 @@ class gamemodePVP:
         print("-----2. OYUNCU KARAKTER SEÇİMİ-----")
         player2 = self.karaktersec()
         self.esyasec(player2)
+        
+        spiker = savasspikeri()
+        player1.spikerekle(spiker)
+        player2.spikerekle(spiker)
+        
         self.Arena(player1, player2)
 
     def karaktersec(self):
@@ -221,6 +226,16 @@ class savaskarakteri:
         self.can = karakter.can + (karakter.zırh * 10)
         self.hasar = karakter.hasar
         self.envanter = []
+        
+        self.spikerler = []
+        
+    def spikerekle(self, spiker):
+        self.spikerler.append(spiker)
+        
+    def hasaral(self, miktar):
+        self.can -= miktar
+        for spiker in self.spikerler:
+            spiker.guncelle(f"{self.name} {miktar} hasar aldı! Kalan can: {self.can}")        
 
 class characterdecorator(object):
     def __init__(self, karakter):
