@@ -2,8 +2,6 @@ import string
 from unicodedata import name
 from abc import ABC, abstractmethod
 
-karakterler = []
-esyalar = []
 class oyunverikutuphanesi:
     def __init__(self):
         self.karakterler = []
@@ -140,15 +138,15 @@ class gamemodeEditor:
         stratejiharitası = {"1": "Normal", "2": "Kritik", "3": "Can Çalma"}
         strateji = stratejiharitası.get(stratejisecimi, "Normal")
 
-        karakterler.append(CharacterFactory.create_character(karakter, zırh, hasar, can, strateji))
+        self.verikutuphanesi.karakterler.append(CharacterFactory.create_character(karakter, zırh, hasar, can, strateji))
     
     def karaktersil(self):    
         print ("Karakter silme moduna gectiniz.")
-        for i, karakter in enumerate(karakterler):
+        for i, karakter in enumerate(self.verikutuphanesi.karakterler):
             print(f"{i + 1}. {karakter.name}")
         secim = int(input("Silmek istediginiz karakterin numarasini giriniz: "))
-        if 0 < secim <= len(karakterler):
-            del karakterler[secim - 1]
+        if 0 < secim <= len(self.verikutuphanesi.karakterler):
+            del self.verikutuphanesi.karakterler[secim - 1]
             print("Karakter silindi.")
         else:
             print("Gecersiz secim.")
@@ -170,16 +168,16 @@ class gamemodeEditor:
                 break
             else:
                 print("Gecersiz secim, lutfen tekrar deneyin.")
-        esyalar.append(yeniesya)      
+        self.verikutuphanesi.esyalar.append(yeniesya)      
         
         
     def esyasil(self):
         print ("Esya silme moduna gectiniz.")
-        for i, esya in enumerate(esyalar):
+        for i, esya in enumerate(self.verikutuphanesi.esyalar):
             print(f"{i + 1}. {esya.name}")
         secim = int(input("Silmek istediginiz esyanin numarasini giriniz: "))
-        if 0 < secim <= len(esyalar):
-            del esyalar[secim - 1]
+        if 0 < secim <= len(self.verikutuphanesi.esyalar):
+            del self.verikutuphanesi.esyalar[secim - 1]
             print("Esya silindi.")
         else:
             print("Gecersiz secim.")                       
@@ -192,10 +190,10 @@ class gamemodePVP:
     def run(self):
         print ("PVP moduna Hoşgeldiniz.")
         
-        if len(karakterler) < 2:
+        if len(self.verikutuphanesi.karakterler) < 2:
             print("Savaşabilmek için sistemde en az 2 karakter olmalı! Lütfen önce Editör'den ekleyin.")
             return
-        if not esyalar:
+        if not self.verikutuphanesi.esyalar:
             print("Savaşabilmek için sistemde en az 1 eşya olmalı! Lütfen önce Editör'den ekleyin.")
             return
         self.savasikur()
@@ -215,28 +213,28 @@ class gamemodePVP:
         self.Arena(player1, player2)
 
     def karaktersec(self):
-        for i, karakter in enumerate(karakterler):
+        for i, karakter in enumerate(self.verikutuphanesi.karakterler):
             print(f"{i + 1}. {karakter.name} (Zırh: {karakter.zırh}, Hasar: {karakter.hasar}, Can: {karakter.can})")
         secim = int(input("Karakter numarasını giriniz: "))
-        secilenstrateji = stratejideposu.stratejigetir(karakterler[secim - 1].stratejiadı)
+        secilenstrateji = stratejideposu.stratejigetir(self.verikutuphanesi.karakterler[secim - 1].stratejiadı)
         
-        if 0 < secim <= len(karakterler):
-            return savaskarakteri(karakterler[secim - 1], secilenstrateji)
+        if 0 < secim <= len(self.verikutuphanesi.karakterler):
+            return savaskarakteri(self.verikutuphanesi.karakterler[secim - 1], secilenstrateji)
         else:
             print("Geçersiz seçim, varsayılan olarak ilk karakter seçildi.")
-            return savaskarakteri(karakterler[0], secilenstrateji)
+            return savaskarakteri(self.verikutuphanesi.karakterler[0], secilenstrateji)
         
     def esyasec(self, oyuncu):
         print(f"{oyuncu.name} için eşya seçim hakkı sayınız: {self.esyalimit} adet")
         for i in range(self.esyalimit):
             print("Mevcut eşyalar:")
-            for j, esya in enumerate(esyalar):
+            for j, esya in enumerate(self.verikutuphanesi.esyalar):
                 print(f"{j + 1}. {esya.name}")
             secim = int(input("Eşya numarasını giriniz (seçim yapmazsanız 0): "))
             if secim == 0:
                 break   
-            if 0 < secim <= len(esyalar):
-                oyuncu.envanter.append(esyalar[secim - 1])   
+            if 0 < secim <= len(self.verikutuphanesi.esyalar):
+                oyuncu.envanter.append(self.verikutuphanesi.esyalar[secim - 1])   
         print(f"{oyuncu.name} envanteri hazırlandı.")
         
     def turoyna(self, saldiran, savunan):
@@ -324,29 +322,30 @@ class CharacterFactory:
 class EsyaFactory:
     @staticmethod
     def create_esya(esya):
-        return Esyalar(esya)  
+        return Esyalar(esya) 
      
+veritabanı = oyunverikutuphanesi()     
 stratejideposu.stratejikaydet("Normal", normalsaldiri())
 stratejideposu.stratejikaydet("Kritik", kritiksaldiri())
 stratejideposu.stratejikaydet("Can Çalma", cancalmasaldiri()) 
-karakterler.append(CharacterFactory.create_character("Sovalye", 3, 4, 30, "Normal"))
-karakterler.append(CharacterFactory.create_character("Iblis", 1, 2, 45, "Kritik"))
-karakterler.append(CharacterFactory.create_character("Okcu", 0, 8, 20, "Normal"))
-karakterler.append(CharacterFactory.create_character("Buyucu", 1, 6, 25, "Can Çalma"))
+veritabanı.karakterler.append(CharacterFactory.create_character("Sovalye", 3, 4, 30, "Normal"))
+veritabanı.karakterler.append(CharacterFactory.create_character("Iblis", 1, 2, 45, "Kritik"))
+veritabanı.karakterler.append(CharacterFactory.create_character("Okcu", 0, 8, 20, "Normal"))
+veritabanı.karakterler.append(CharacterFactory.create_character("Buyucu", 1, 6, 25, "Can Çalma"))
 iksir = EsyaFactory.create_esya("Can İksiri")
 iksir.etkiekle(esyaetkisi("kendi", "can", 5))
-esyalar.append(iksir)
+veritabanı.esyalar.append(iksir)
 sopa = EsyaFactory.create_esya("Tanrının Sopası")
 sopa.etkiekle(esyaetkisi("dusman", "can", -5))
-esyalar.append(sopa)
+veritabanı.esyalar.append(sopa)
 tuy = EsyaFactory.create_esya("Demir Tüy")
 tuy.etkiekle(esyaetkisi("kendi", "hasar", 2))
-esyalar.append(tuy)
+veritabanı.esyalar.append(tuy)
 sise = EsyaFactory.create_esya("Saka Şisesi")
 sise.etkiekle(esyaetkisi("kendi", "can", 12))
 sise.etkiekle(esyaetkisi("kendi", "hasar", -1))
-esyalar.append(sise)
-veritabanı = oyunverikutuphanesi()
+veritabanı.esyalar.append(sise)
+
 oyun = game (veritabanı) 
 
 print ("Oyuna Hosgeldiniz!")
