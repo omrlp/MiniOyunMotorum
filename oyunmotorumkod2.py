@@ -109,9 +109,15 @@ class gamemodeEditor:
         zırh = int(input("Karakterin zırh degerini giriniz: "))
         hasar = int(input("Karakterin hasar degerini giriniz: "))
         can = int(input("Karakterin can degerini giriniz: "))
-        karakterler.append(CharacterFactory.create_character(karakter, zırh, hasar, can))
         
-    def karaktersil(self):
+        print("Strateji secimi: (1 - Normal / 2 - Kritik / 3 - Can Çalma)")
+        stratejisecimi = input("Strateji numarasini giriniz: ")
+        stratejiharitası = {"1": "Normal", "2": "Kritik", "3": "Can Çalma"}
+        strateji = stratejiharitası.get(stratejisecimi, "Normal")
+
+        karakterler.append(CharacterFactory.create_character(karakter, zırh, hasar, can, strateji))
+    
+    def karaktersil(self):    
         print ("Karakter silme moduna gectiniz.")
         for i, karakter in enumerate(karakterler):
             print(f"{i + 1}. {karakter.name}")
@@ -285,11 +291,12 @@ class gameobjects:
         self.name = name
 
 class characters(gameobjects):
-    def __init__(self, name, zırh, hasar, can):
+    def __init__(self, name, zırh, hasar, can,stratejiadı = "Normal"):
         super().__init__(name)
         self.zırh = zırh
         self.hasar = hasar
         self.can = can
+        self.startejiadı = stratejiadı
                 
 class Esyalar(gameobjects):
     def __init__(self, name):
@@ -306,8 +313,8 @@ class Esyalar(gameobjects):
      
 class CharacterFactory:
     @staticmethod
-    def create_character(name ,zırh, hasar, can):
-        return characters(name, zırh, hasar, can)
+    def create_character(name ,zırh, hasar, can, stratejiadı = "Normal"):
+        return characters(name, zırh, hasar, can, stratejiadı)
      
 class EsyaFactory:
     @staticmethod
