@@ -13,7 +13,29 @@ class gozlemci(ABC):
 class savasspikeri(gozlemci):
     def guncelle(self, mesaj):
         print(f"SPİKER: {mesaj}")
+        
+class saldırıstratejisi(ABC):
+    def saldır(self, saldiran, savunan):
+        pass
             
+class normalsaldiri(saldırıstratejisi):
+    def saldır(self, saldiran, savunan):
+        spiker.guncelle(f"{saldiran.name} normal saldırı yapıyor...")
+        savunan.hasaral(saldiran.hasar)
+        
+class kritiksaldiri(saldırıstratejisi):
+    def saldır(self, saldiran, savunan):
+        kritikhasar = saldiran.hasar * 2
+        spiker.guncelle(f"{saldiran.name} kritik saldırı yapıyor! Hasar: {kritikhasar}")
+        savunan.hasaral(kritikhasar)  
+        
+class cancalmasaldiri(saldırıstratejisi):
+    def saldır(self, saldiran, savunan):
+        cancalma = int(saldiran.hasar * 0.5)
+        spiker.guncelle(f"{saldiran.name} can çalma saldırısı yapıyor! Hasar: {saldiran.hasar}, Can Çalma: {cancalma}")
+        savunan.hasaral(saldiran.hasar)
+        saldiran.can += cancalma
+        spiker.guncelle(f"{saldiran.name} {cancalma} can çaldı! Güncel can: {saldiran.can}")                         
 
 class etkilesim(ABC):
     def uygula(self, kullanan, hedef):
