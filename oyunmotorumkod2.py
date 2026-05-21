@@ -1,5 +1,40 @@
 
 import string
+<<<<<<< Updated upstream
+=======
+from unicodedata import name
+from abc import ABC, abstractmethod
+
+karakterler = []
+esyalar = []
+class gozlemci(ABC):
+    @abstractmethod
+    def guncelle(self, mesaj):
+        pass
+class savasspikeri(gozlemci):
+    def guncelle(self, mesaj):
+        print(f"SPİKER: {mesaj}")    
+
+class etkilesim(ABC):
+    def uygula(self, kullanan, hedef):
+        pass
+    
+class esyaetkisi(etkilesim):
+    def __init__(self, kime, etken , miktar):
+        self.kime = kime
+        self.etken = etken
+        self.miktar = miktar
+    
+    def uygula(self, kullanan, hedef):
+        hedefkarakter = kullanan if self.kime == "kendi" else hedef
+        mevcutdeger = getattr(hedefkarakter, self.etken)    
+        yenideger = mevcutdeger + self.miktar
+        setattr(hedefkarakter, self.etken, yenideger)
+        
+        durum = "artırıldı" if self.miktar > 0 else "azaltıldı"
+        hedefisim = "kendi" if self.kime == "kendi" else "dusmanın"  
+        print(f"{hedefisim} {self.etken} degeri {durum} ({mevcutdeger} -> {yenideger})")
+>>>>>>> Stashed changes
 
 class game:
     def __init__(self):
